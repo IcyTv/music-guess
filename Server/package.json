@@ -1,0 +1,24 @@
+{
+  "name": "music_guess",
+  "version": "1.0.0",
+  "description": "This is a game where you guess the artists",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Michael",
+  "license": "ISC",
+  "dependencies": {
+    "big-integer": "^1.6.26",
+    "crypto-js": "^3.1.9-1",
+    "express": "^4.13.4",
+    "node-id3": "^0.1.0",
+    "request": "^2.83.0",
+    "socket.io": "^1.4.5",
+    "sqlite3": "^3.1.13"
+  },
+  "keywords": [
+    "music"
+  ]
+}

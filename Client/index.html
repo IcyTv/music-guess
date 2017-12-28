@@ -1,0 +1,30 @@
+<html>
+<head>
+  <link rel="stylesheet" href="./assets/styles.css">
+  <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.css">
+  <!--Scripts-->
+  <script type="text/javascript" src="./assets/libs/p5.min.js"></script>
+  <script type="text/javascript" src="login.js"></script>
+  <script type="text/javascript" src="./assets/libs/crypto-js/crypto-js.js"></script>
+  <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+  <script src="http://peterolson.github.com/BigInteger.js/BigInteger.min.js"></script>
+</head>
+<body background="./assets/bg.png">
+  <form id="form">
+    <div class="form-group custom-form-group">
+      <label for="username">Name</label>
+      <input type="text" name="username" class="form-control" id="username" aria-describedby="userHelp" placeholder="Enter username">
+      <!-- <small id="usrSmall" class="form-text">Log in to save your progress. If you want to reamin anonymous, type in "anonymous".</small> -->
+    </div>
+    <div class="form-group custom-form-group">
+      <label for="password">Password</label>
+      <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+    </div>
+    <button type="button" class="btn btn-primary" id="submit-btn" >Submit</button>
+    <br/>
+    <small id="wait-txt"></small>
+    <br/>
+    <small class="form-text">Don't have an account yet? Register <a href="register.html">here</a>.<br/><small>You will be redirected!</small></small>
+  </form>
+</body>
+</html>

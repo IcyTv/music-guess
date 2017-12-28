@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="cache-control" content="no-cache"/>
+  <link rel="stylesheet" href="./assets/styles.css">
+  <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.css">
+  <!-- <script src="./assets/bootstrap/js/bootstrap.js"></script> -->
+  <script text="text/javascript" src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+  <script src="http://peterolson.github.com/BigInteger.js/BigInteger.min.js"></script>
+  <script text="text/javascript" src="./assets/libs/p5.js"></script>
+  <!-- <script src="./assets/libs/socket.io-stream.js"></script> -->
+  <script text="text/javascript" src="./assets/libs/addons/p5.dom.js"></script>
+  <script text="text/javascript" src="./assets/libs/resize.js"></script>
+  <script text="text/javascript" src="game.js"></script>
+</head>
+<body background="./assets/bg.png">
+  <div class="img-holder">
+    <img alt="Album Cover" src="./assets/test.jpg" width="400" height="400" id="album">
+  </div>
+  <div class="btn-group btn-group-justified btn-holder">
+    <div class="btn-group-vertical btn-group-justified btn-holder-vertical">
+      <button type="button" class="btn btn-primary btn-lg btn-block custom-button btn-answer"></button>
+      <button type="button" class="btn btn-primary btn-lg btn-block custom-button btn-answer"></button>
+    </div>
+    <div class="btn-group-vertical btn-group-justified btn-holder-vertical">
+      <button type="button" class="btn btn-primary btn-lg btn-block custom-button btn-answer"></button>
+      <button type="button" class="btn btn-primary btn-lg btn-block custom-button btn-answer"></button>
+    </div>
+  </div>
+  <p id="Identifier"></p>
+  <div id="TimerContainer">
+    <div id="Timer"></div>
+  </div>
+  <div class="btn-group">
+    <button type="button" class="btn btn-primary btn-lg custom-button" id="play">Play</button>
+  <audio src="" autoplay=true type="audio/mpeg" loop=true id="player">Your browser doesn't support this element</audio>
+</body>
+</html>
