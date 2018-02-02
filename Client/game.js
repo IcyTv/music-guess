@@ -1,10 +1,5 @@
-let ansbtns = [];
-
-function sleep (time) {
-  return new Promise((resolve) => setTimeout(resolve, time));
-}
-
 function setup(){
+  window.ansbtns = [];
   let answer = "";
   let socket;
   let possible = [];
@@ -20,10 +15,24 @@ function setup(){
   let first = true;
   let token;
   let authSocket;
+  let highSocket;
+
+  let ip = self.location.hostname;
 
 
-  authSocket = io.connect('http://192.168.1.14:4000', {'secure':true});
+  authSocket = io.connect('http://' + ip + ':4000', {'secure':true});
+  highSocket = io.connect('http://' + ip + ':5000');
   //Logging in
+
+  authSocket.emit("hash-confirm", CryptoJS.MD5(setup.toString().trim()).toString(), "game.js");
+
+  authSocket.on("confirm-hash", (conf) => {
+    if(conf.err){
+      console.log("Hash failed");
+      window.location.replace("index.html");
+    }
+  });
+
   try {
     token = document.cookie.split(';')[0].split('=')[1];
     if(token == undefined){
@@ -39,7 +48,7 @@ function setup(){
   });
 
   albumimg = document.getElementById('album');
-  socket = io.connect('http://192.168.1.14:3000');
+  socket = io.connect('http://'+ ip + ':3000');
 
   params = getURLParams();
 
@@ -91,6 +100,10 @@ function setup(){
 
   move();
 
+  function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+  }
+
   function reupdate(){
     stop = 0;
     dataCollection = {};
@@ -119,7 +132,7 @@ function setup(){
         console.log(err);
         //cont();
       }
-      player.src = 'http://192.168.1.14:3000/music/' + socket.id + '?song=' + encodeURIComponent(answer);
+      player.src = 'http://' + ip + ':3000/music/' + socket.id + '?song=' + encodeURIComponent(answer);
       let unused = ansbtns.slice();
       let ansart = dataCollection[answer].artist;
       let abtn = unused.splice(floor(random(0, unused.length)), 1)[0];
@@ -137,7 +150,7 @@ function setup(){
         }
         btn.innerText = r;
       }
-      albumimg.src = 'http://192.168.1.14:3000/image/' + socket.id + '?name=' + genre;
+      albumimg.src = 'http://' + ip + ':3000/image/' + socket.id + '?name=' + genre;
       if(isMobile.any() && first){
       } else {
         stop = 1;
@@ -183,8 +196,12 @@ function setup(){
           btn.disabled = true;
         }
         sleep(1000).then(() => {
-          document.cookie = 'score=' + score + ';domain=;path=/';
-          document.location.replace('done.html');
+          highSocket.emit("set-name", document.cookie.split(';')[1].split('=')[1]);
+          highSocket.on('name-set', () => {
+            highSocket.emit('score', score);
+            document.cookie = 'score=' + score + ';domain=;path=/';
+            document.location.replace('done.html');
+          });
         });
       } else if(timer < 0){
         timer = 0;
