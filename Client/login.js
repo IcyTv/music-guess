@@ -1,7 +1,3 @@
-function sleep(time){
-  return new Promise((resolve) => setTimeout(resolve, time));
-}
-
 function setup(){
   let socket;
   let g, p, xa, ya, yb, secret;
@@ -9,6 +5,8 @@ function setup(){
   let pwfield;
   let nmfield;
   let txt;
+
+  let ip = self.location.hostname;
 
   document.addEventListener('keypress', enterPress);
 
@@ -20,7 +18,17 @@ function setup(){
   nmfield = document.getElementById('username');
   pwfield = document.getElementById('password');
 
-  socket = io.connect("http://192.168.1.14:4000", {'secure': true});
+  socket = io.connect("http://" + ip + ":4000", {'secure': true});
+
+  socket.emit("hash-confirm", CryptoJS.MD5(setup.toString().trim()).toString(), "login.js");
+
+  socket.on("confirm-hash", (conf) => {
+    if(conf.err){
+      txt.style.color = "red";
+      txt.innerHTML = "Hash confirm failed. Please don't change this file!";
+      return;
+    }
+  });
 
   //Socket.on events
   socket.on("return-gp", (g_, p_) => {
@@ -69,6 +77,10 @@ function setup(){
   xa = bigInt.randBetween("1e77", "1e78");
 
 
+  function sleep(time){
+    return new Promise((resolve) => setTimeout(resolve, time));
+  }
+
   function enterPress(event) {
     if(event.key == 'Enter'){
       clicked();
@@ -79,7 +91,7 @@ function setup(){
     if(pwfield.value.length < 8){
       txt.style.color = "red";
       txt.innerHTML = "Password too short!";
-    }else if(nmfield.value.length < 3){
+    }else if(nmfield.value.length < 4){
       txt.style.color = "red";
       txt.innerHTML = "Username too short!";
     } else {
@@ -97,7 +109,7 @@ function setup(){
       login();
     } else {
       txt.style.color = "red";
-      txt.innerHTML = "Please wait while we are loading";
+      txt.innerHTML = "Please wait while we are establishing a secure connection";
       sleep(500).then(wait);
       function wait(){
         if(secret == undefined){
