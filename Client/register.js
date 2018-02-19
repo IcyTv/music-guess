@@ -20,7 +20,9 @@ function setup() {
   errormsg = document.getElementById('error-msg');
   document.getElementById('submit-btn').addEventListener('click', submit);
 
-  socket.emit("hash-confirm", CryptoJS.MD5(setup.toString().trim()).toString(), "register.js");
+  httpGet(document.getElementById("scriptJS").src, 'text', false, function(response) {
+    socket.emit("hash-confirm", CryptoJS.MD5(response.trim()).toString(), "register.js");
+  });
 
   socket.on("confirm-hash", (conf) => {
     if(conf.err){

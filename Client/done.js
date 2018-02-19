@@ -10,7 +10,9 @@ function setup(){
   let authSocket = io.connect('http://' + ip + ':4000', {'secure': true});
   let highSocket = io.connect('http://' + ip + ':5000');
 
-  authSocket.emit("hash-confirm", CryptoJS.MD5(setup.toString().trim()).toString(), "done.js");
+  httpGet(document.getElementById("scriptJS").src, 'text', false, function(response) {
+    authSocket.emit("hash-confirm", CryptoJS.MD5(response.trim()).toString(), "done.js");
+  });
 
   authSocket.on("confirm-hash", (conf) => {
     if(conf.err){

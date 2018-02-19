@@ -1,8 +1,7 @@
 let maxftsize = 900;
 let minftsize = 30;
 let fscalefactor = 0.05;
-let albumimg;
-let imgsfactor = 0.15;
+let imgsfactor = 0.;
 
 function windowResized(){
   //Dynamic fontsize
@@ -18,8 +17,12 @@ function windowResized(){
 
   //Dynamic img size
   let s = windowWidth*imgsfactor;
-  albumimg.width = s;
-  albumimg.height = s;
+  try{
+    window.albumimg.width = s;
+    window.albumimg.height = s;
+  } catch(e){
+    console.log(e);
+  }
 }
 
 

@@ -20,12 +20,15 @@ function setup(){
 
   socket = io.connect("http://" + ip + ":4000", {'secure': true});
 
-  socket.emit("hash-confirm", CryptoJS.MD5(setup.toString().trim()).toString(), "login.js");
+  httpGet(document.getElementById("scriptJS").src, 'text', false, function(response) {
+    socket.emit("hash-confirm", CryptoJS.MD5(response.trim()).toString(), "login.js");
+  });
 
   socket.on("confirm-hash", (conf) => {
     if(conf.err){
       txt.style.color = "red";
       txt.innerHTML = "Hash confirm failed. Please don't change this file!";
+      throw new Error("Hash confirm failed!");
       return;
     }
   });

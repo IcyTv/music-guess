@@ -1,17 +1,7 @@
 const sql = require('./sql-lib.js');
 const express = require('express');
 const app = express();
-const server = app.listen(5000, listen);
-const io = require('socket.io')(server);
 const log = new (require("./log-lib"))("HIGHSCORE", 1, "./logfile.log");
-
-function listen() {
-  var host = server.address().address;
-  var port = server.address().port;
-  //console.log('App listening at http://' + host + ':' + port);
-  log.info("Starting at " + host + ":" + port);
-}
-
 
 function initSql() {
   sql.start().then(() => {
@@ -20,7 +10,15 @@ function initSql() {
 }
 
 function startServer() {
+  const server = app.listen(5000, listen);
+  const io = require('socket.io')(server);
   app.use(express.static('public'));
+  function listen() {
+    var host = server.address().address;
+    var port = server.address().port;
+    //console.log('App listening at http://' + host + ':' + port);
+    log.info("Starting at " + host + ":" + port);
+  }
 
   io.on('connection', (socket) => {
     log.info("Connection", socket.id);

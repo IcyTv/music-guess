@@ -5,6 +5,18 @@ const express = require('express');
 const bigInt = require('big-integer');
 const fs = require("fs");
 
+//For hash confirm
+const jsObfuscator = require('js-obfuscator');
+const options = {
+  keepLinefeeds:      false,
+  keepIndentations:   false,
+  encodeStrings:      false,
+  encodeNumbers:      false,
+  moveStrings:        false,
+  replaceNames:       false,
+  variableExclusions: [ '^_get_', '^_set_', '^_mtd_' ]
+};
+
 //Importing Custom Libraries
 const sql = require('./sql-lib.js');
 const log = new (require("./log-lib.js"))('AUTH', 0, "./logfile.log");
@@ -66,19 +78,21 @@ function initAuth() {
       });
     });
     socket.on("hash-confirm", (hash, page) => {
-      fs.exists("../../../Client/htdocs/" + page, (err) => {
+      fs.exists("../../../Client/" + page, (err) => {
         if(!err && access.includes(page)) {
-          fs.readFile("../Client/htdocs/" + page, (err, fc) => {
-            if(err){
-              log.error("Error while reading file", socket.id);
-              socket.emit('confirm-hash', {err: "Wrong hash"});
-            } else if(hash == CryptoJS.MD5(fc.toString().trim()).toString()){
-              log.info("Hash confirmed", socket.id);
-              socket.emit("confirm-hash", {confirmation: true});
-            } else {
-              log.warning("Wrong hash", socket.id);
-              socket.emit("confirm-hash", {err: "Wrong hash"});
-            }
+          fs.readFile("../Client/" + page, (err, fc) => {
+            jsObfuscator(fc.toString(), options).then((ofc) => {
+              if(err){
+                log.error("Error while reading file", socket.id);
+                socket.emit('confirm-hash', {err: "Wrong hash"});
+              } else if(hash == CryptoJS.MD5(ofc.toString().trim()).toString()){
+                log.info("Hash confirmed", socket.id);
+                socket.emit("confirm-hash", {confirmation: true});
+              } else {
+                log.warning("Wrong hash", socket.id);
+                socket.emit("confirm-hash", {err: "Wrong hash"});
+              }
+            });
           });
         } else {
           log.warning("Access denied to " + page, socket.id);

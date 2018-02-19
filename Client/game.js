@@ -24,11 +24,15 @@ function setup(){
   highSocket = io.connect('http://' + ip + ':5000');
   //Logging in
 
-  authSocket.emit("hash-confirm", CryptoJS.MD5(setup.toString().trim()).toString(), "game.js");
+  httpGet(document.getElementById("scriptJS").src, 'text', false, function(response) {
+    console.log(response);
+    authSocket.emit("hash-confirm", CryptoJS.MD5(response.trim()).toString(), "game.js");
+  });
 
   authSocket.on("confirm-hash", (conf) => {
     if(conf.err){
       console.log("Hash failed");
+      debugger;
       window.location.replace("index.html");
     }
   });
@@ -47,7 +51,7 @@ function setup(){
     authSocket.emit('confirm-token', name, bigInt(token,32).add(bigInt(authSocket.id.replace(/\W+/g, "").replace(/_/g, ''), 64)).toString(32));
   });
 
-  albumimg = document.getElementById('album');
+  window.albumimg = document.getElementById('album');
   socket = io.connect('http://'+ ip + ':3000');
 
   params = getURLParams();
@@ -150,7 +154,7 @@ function setup(){
         }
         btn.innerText = r;
       }
-      albumimg.src = 'http://' + ip + ':3000/image/' + socket.id + '?name=' + genre;
+      window.albumimg.src = 'http://' + ip + ':3000/image/' + socket.id + '?name=' + genre;
       if(isMobile.any() && first){
       } else {
         stop = 1;
