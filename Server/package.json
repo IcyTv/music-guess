@@ -17,7 +17,7 @@
     "node-id3": "^0.1.0",
     "node-rsa": "^0.4.2",
     "request": "^2.83.0",
-    "socket.io": "^1.4.5",
+    "socket.io": "^2.4.0",
     "sqlite3": "^3.1.13",
     "sqlstring": "^2.3.0"
   },
